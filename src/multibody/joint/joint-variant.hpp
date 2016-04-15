@@ -30,7 +30,6 @@ namespace se3
   typedef std::vector<JointModelVariant> JointModelVector;
   typedef std::vector<JointDataVariant> JointDataVector;
 
-
 } // namespace se3
 
 EIGEN_DEFINE_STL_VECTOR_SPECIALIZATION(se3::JointModelVariant)
