@@ -43,6 +43,10 @@ namespace se3
   class Model;
   class Data;
   
+  /** Description of the kinematic tree.
+   *
+   * \ingroup Module_MultibodyModel
+   */
   class Model
   {
   public:
@@ -345,6 +349,10 @@ namespace se3
 
   };
 
+  /** Computation buffers and result storage of the kinematic tree, used by the algorithms.
+   *
+   * \ingroup Module_MultibodyModel
+   */
   class Data
   {
   public:
