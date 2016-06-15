@@ -136,6 +136,8 @@ namespace se3
       typedef SE3Tpl<OtherScalar,OtherOptions> ReturnType;
       ReturnType res;
       
+      res.translation().setZero();
+      
 //      Scalar ca,sa;
 //      SINCOS(angle_,&sa,&ca);
       
@@ -202,7 +204,7 @@ namespace se3
   };
 
   template<int axis>
-  struct MotionRevolute : MotionBase < MotionRevolute<axis> >
+  struct MotionRevolute : MotionSparseBase < MotionRevolute<axis> >
   {
     SPATIAL_TYPEDEF_TEMPLATE(MotionRevolute);
 
@@ -236,6 +238,11 @@ namespace se3
       res.angular()[axis] += w;
       
       return res;
+    }
+    
+    Motion dense() const
+    {
+      return (Motion) (*this);
     }
   }; // struct MotionRevolute
 

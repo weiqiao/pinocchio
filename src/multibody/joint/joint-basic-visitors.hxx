@@ -59,7 +59,7 @@ namespace se3
     template<typename D1, typename D2>
     void operator()(const JointModelBase<D1> & , JointDataBase<D2> & ) const
     { 
-      SE3_STATIC_ASSERT(false, MIXING_JOINT_MODEL_AND_DATA_OF_DIFFERENT_TYPE);
+      PINOCCHIO_STATIC_ASSERT(false, MIXING_JOINT_MODEL_AND_DATA_OF_DIFFERENT_TYPE);
     }
 
     template<typename D>
@@ -90,7 +90,7 @@ namespace se3
     template<typename D1, typename D2>
     void operator()(const JointModelBase<D1> & , JointDataBase<D2> & ) const
     { 
-      SE3_STATIC_ASSERT(false, MIXING_JOINT_MODEL_AND_DATA_OF_DIFFERENT_TYPE);
+      PINOCCHIO_STATIC_ASSERT(false, MIXING_JOINT_MODEL_AND_DATA_OF_DIFFERENT_TYPE);
     }
 
     template<typename D>
@@ -121,7 +121,7 @@ namespace se3
     template<typename D1, typename D2>
     void operator()(const JointModelBase<D1> & , JointDataBase<D2> & ) const
     { 
-      SE3_STATIC_ASSERT(false, MIXING_JOINT_MODEL_AND_DATA_OF_DIFFERENT_TYPE);
+      PINOCCHIO_STATIC_ASSERT(false, MIXING_JOINT_MODEL_AND_DATA_OF_DIFFERENT_TYPE);
     }
 
     template<typename D>

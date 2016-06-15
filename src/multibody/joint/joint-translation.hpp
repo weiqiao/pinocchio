@@ -64,7 +64,7 @@ namespace se3
     };
   }; // traits MotionTranslation
 
-  struct MotionTranslation : MotionBase < MotionTranslation >
+  struct MotionTranslation : MotionSparseBase < MotionTranslation >
   {
     SPATIAL_TYPEDEF_NO_TEMPLATE(MotionTranslation);
 
@@ -97,6 +97,11 @@ namespace se3
     void subTo (MotionTpl<OtherScalar, OtherOptions> & dest) const
     {
       dest.linear() -= v;
+    }
+    
+    Motion dense() const
+    {
+      return (Motion) (*this);
     }
   }; // struct MotionTranslation
 

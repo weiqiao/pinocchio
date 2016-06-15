@@ -74,8 +74,8 @@ BOOST_AUTO_TEST_CASE (test_motion)
 {
   using namespace se3;
   
-  JointModelRX joint_model_RX;
-  JointDataRX joint_data_RX;
+//  JointModelRX joint_model_RX;
+//  JointDataRX joint_data_RX;
   
   SE3Revolute<0> SE3_revolute(M_PI/4.);
   
@@ -111,7 +111,6 @@ BOOST_AUTO_TEST_CASE (vsRX)
 {
   using namespace se3;
   typedef Eigen::Matrix <double, 3, 1> Vector3;
-  typedef Eigen::Matrix <double, 6, 1> Vector6;
   typedef Eigen::Matrix <double, 3, 3> Matrix3;
   
   Eigen::Vector3d axis;
@@ -716,10 +715,10 @@ BOOST_AUTO_TEST_CASE (vsRX)
     computeAllTerms(modelPlanar, dataPlanar, q, v);
     computeAllTerms(modelFreeflyer, dataFreeFlyer, qff, vff);
     
-    BOOST_CHECK(dataFreeFlyer.oMi[1].isApprox(dataPlanar.oMi[1]));
-    BOOST_CHECK(dataFreeFlyer.liMi[1].isApprox(dataPlanar.liMi[1]));
-    BOOST_CHECK(dataFreeFlyer.Ycrb[1].matrix().isApprox(dataPlanar.Ycrb[1].matrix()));
-    BOOST_CHECK(dataFreeFlyer.f[1].coeffs().isApprox(dataPlanar.f[1].coeffs()));
+    BOOST_CHECK(dataFreeFlyer.oMi[1].isApprox(dataPlanar.oMi[1],1e-12));
+    BOOST_CHECK(dataFreeFlyer.liMi[1].isApprox(dataPlanar.liMi[1],1e-12));
+    BOOST_CHECK(dataFreeFlyer.Ycrb[1].matrix().isApprox(dataPlanar.Ycrb[1].matrix(), 1e-12));
+    BOOST_CHECK(dataFreeFlyer.f[1].coeffs().isApprox(dataPlanar.f[1].coeffs(), 1e-12));
     
     Eigen::VectorXd nle_expected_ff(3); nle_expected_ff << dataFreeFlyer.nle[0],
     dataFreeFlyer.nle[1],
@@ -870,4 +869,5 @@ BOOST_AUTO_TEST_CASE (vsRX)
     
     
   }
-  BOOST_AUTO_TEST_SUITE_END ()
+
+BOOST_AUTO_TEST_SUITE_END ()

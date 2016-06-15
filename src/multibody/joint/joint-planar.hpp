@@ -65,49 +65,89 @@ namespace se3
     };
   }; // traits MotionPlanar
 
-  struct MotionPlanar : MotionBase < MotionPlanar >
+  struct MotionPlanar : MotionSparseBase < MotionPlanar >
   {
     SPATIAL_TYPEDEF_NO_TEMPLATE(MotionPlanar);
 
-    MotionPlanar () : x_dot_(NAN), y_dot_(NAN), theta_dot_(NAN)      {}
-    MotionPlanar (Scalar_t x_dot, Scalar_t y_dot, Scalar_t theta_dot) : x_dot_(x_dot), y_dot_(y_dot), theta_dot_(theta_dot)  {}
-    Scalar_t x_dot_;
-    Scalar_t y_dot_;
-    Scalar_t theta_dot_;
+    MotionPlanar () : vx_(NAN), vy_(NAN), wz_(NAN)      {}
+    MotionPlanar (const Scalar_t vx, const Scalar_t vy, const Scalar_t wz)
+    : vx_(vx)
+    , vy_(vy)
+    , wz_(wz)
+    {}
+    
+    Scalar_t & vx () { return vx_; };
+    const Scalar_t & vx () const { return vx_; };
+    
+    Scalar_t & vy () { return vy_; };
+    const Scalar_t & vy () const { return vy_; };
+    
+    Scalar_t & wz () { return wz_; };
+    const Scalar_t & wz () const { return wz_; };
 
     template<typename OtherScalar, int OtherOptions>
     operator MotionTpl<OtherScalar,OtherOptions> () const
     {
       typedef MotionTpl<OtherScalar,OtherOptions> ReturnType;
       typedef typename ReturnType::Vector3 Vector3;
-      return ReturnType (Vector3(x_dot_, y_dot_, 0.), Vector3(0., 0., theta_dot_));
+      return ReturnType (Vector3(vx_, vy_, 0.), Vector3(0., 0., wz_));
     }
     
     template<typename OtherScalar, int OtherOptions>
     void addTo (MotionTpl<OtherScalar, OtherOptions> & dest) const
     {
-      dest.linear()[0] += x_dot_;
-      dest.linear()[1] += y_dot_;
-      dest.angular()[2] += theta_dot_;
+      dest.linear()[0] += vx_;
+      dest.linear()[1] += vy_;
+      dest.angular()[2] += wz_;
     }
     
     template<typename OtherScalar, int OtherOptions>
     void subTo (MotionTpl<OtherScalar, OtherOptions> & dest) const
     {
-      dest.linear()[0] -= x_dot_;
-      dest.linear()[1] -= y_dot_;
-      dest.angular()[2] -= theta_dot_;
+      dest.linear()[0] -= vx_;
+      dest.linear()[1] -= vy_;
+      dest.angular()[2] -= wz_;
     }
+    
+    static MotionPlanar Zero()
+    {
+      return MotionPlanar(0.,0.,0.);
+    }
+    
+    void setZero()
+    {
+      vx_ = vy_ = wz_ = 0.;
+    }
+    
+    operator Motion () const
+    {
+      Motion res(Vector3(vx_,vy_,0.), Vector3(0.,0.,wz_));
+      return res;
+    }
+    
+    Motion dense() const
+    {
+      return (Motion) (*this);
+    }
+    
+  protected:
+    
+    /// \brief Linear velocity along the X axis.
+    Scalar_t vx_;
+    /// \brief Linear velocity along the Y axis.
+    Scalar_t vy_;
+    /// \brief Angular velocity along the Z axis.
+    Scalar_t wz_;
 
   }; // struct MotionPlanar
   
 //  inline Motion operator+ (const MotionPlanar & m1, const Motion & m2)
 //  {
 //    Motion result (m2);
-//    result.linear ()[0] += m1.x_dot_;
-//    result.linear ()[1] += m1.y_dot_;
+//    result.linear ()[0] += m1.vx_;
+//    result.linear ()[1] += m1.vy_;
 //
-//    result.angular ()[2] += m1.theta_dot_;
+//    result.angular ()[2] += m1.wz_;
 //
 //    return result;
 //  }
@@ -235,8 +275,8 @@ namespace se3
     const Motion::Vector3 & m1_t = m1.linear();
     const Motion::Vector3 & m1_w = m1.angular();
 
-    result.angular () << m1_w(1) * m2.theta_dot_, - m1_w(0) * m2.theta_dot_, 0.;
-    result.linear () << m1_t(1) * m2.theta_dot_ - m1_w(2) * m2.y_dot_, - m1_t(0) * m2.theta_dot_ + m1_w(2) * m2.x_dot_, m1_w(0) * m2.y_dot_ - m1_w(1) * m2.x_dot_;
+    result.angular () << m1_w(1) * m2.wz(), - m1_w(0) * m2.wz(), 0.;
+    result.linear () << m1_t(1) * m2.wz() - m1_w(2) * m2.vy(), - m1_t(0) * m2.wz() + m1_w(2) * m2.vx(), m1_w(0) * m2.vy() - m1_w(1) * m2.vx();
 
     return result;
   }
@@ -348,7 +388,11 @@ namespace se3
 //      return *this;
 //    }
 
-    JointDataPlanar (const JointModel & jmodel) : jmodel(jmodel) {}
+    JointDataPlanar (const JointModel & jmodel)
+    : M(Transformation_t::Identity())
+    , v(Motion_t::Zero())
+    , jmodel(jmodel)
+    {}
 
     JointDataDense<NQ, NV> toDense_impl() const
     {
@@ -392,9 +436,9 @@ namespace se3
       data.M.rotation ().topLeftCorner <2,2> () << c_theta, -s_theta, s_theta, c_theta;
       data.M.translation ().head <2> () = q.head<2> ();
 
-      data.v.x_dot_ = q_dot(0);
-      data.v.y_dot_ = q_dot(1);
-      data.v.theta_dot_ = q_dot(2);
+      data.v.vx() = q_dot(0);
+      data.v.vy() = q_dot(1);
+      data.v.wz() = q_dot(2);
     }
     
     void calc_aba(JointData & data, Inertia::Matrix6 & I, const bool update_I) const

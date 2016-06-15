@@ -86,7 +86,7 @@ namespace se3
   }; // struct traits MotionPrismatic
 
   template<int axis>
-  struct MotionPrismatic : MotionBase < MotionPrismatic < axis > >
+  struct MotionPrismatic : MotionSparseBase < MotionPrismatic < axis > >
   {
     SPATIAL_TYPEDEF_TEMPLATE(MotionPrismatic);
 
@@ -105,6 +105,11 @@ namespace se3
     void addTo (MotionTpl<OtherScalar, OtherOptions> & dest) const
     {
       dest.linear()[axis] += v;
+    }
+    
+    Motion dense() const
+    {
+      return (Motion) (*this);
     }
   }; // struct MotionPrismatic
 

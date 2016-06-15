@@ -38,11 +38,11 @@ namespace se3
 
     template<typename JointModel>
     static void algo(const se3::JointModelBase<JointModel> & jmodel,
-                            se3::JointDataBase<typename JointModel::JointData> & jdata,
-                            const se3::Model & model,
-                            se3::Data & data,
-                            const Model::JointIndex & i,
-                            const Eigen::VectorXd & q)
+                     se3::JointDataBase<typename JointModel::JointData> & jdata,
+                     const se3::Model & model,
+                     se3::Data & data,
+                     const Model::JointIndex & i,
+                     const Eigen::VectorXd & q)
     {
 //      const Model::JointIndex & i = (Model::JointIndex) jmodel.id();
       jmodel.calc(jdata.derived(),q);
@@ -63,10 +63,10 @@ namespace se3
 
     template<typename JointModel>
     static void algo(const JointModelBase<JointModel> & jmodel,
-                            JointDataBase<typename JointModel::JointData> & jdata,
-                            const Model & model,
-                            Data & data,
-                            const Model::JointIndex & i)
+                     JointDataBase<typename JointModel::JointData> & jdata,
+                     const Model & model,
+                     Data & data,
+                     const Model::JointIndex & i)
     {
       /*
        * F[1:6,i] = Y*S
@@ -117,7 +117,7 @@ namespace se3
     }
   };
 
-  inline const Data::MassMatrix &
+  inline const Eigen::MatrixXd &
   crba(const Model & model, Data & data,
        const Eigen::VectorXd & q)
   {

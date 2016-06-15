@@ -85,7 +85,7 @@ namespace se3
 //    }
 //    inline friend const Motion operator+ (const BiasSpherical & c, const MotionTpl<OtherScalar, OtherOptions> & v) { return Motion (v.linear (), v.angular () + c ()); }
 
-    struct MotionSpherical : MotionBase<MotionSpherical>
+    struct MotionSpherical : MotionSparseBase<MotionSpherical>
     {
       MotionSpherical ()                       {w.fill(NAN);}
       MotionSpherical (const typename MotionTpl<Scalar,Options>::Vector3 & w) : w (w)  {}
@@ -93,6 +93,12 @@ namespace se3
 
       typename MotionTpl<Scalar,Options>::Vector3 & operator() () { return w; }
       const typename MotionTpl<Scalar,Options>::Vector3 & operator() () const { return w; }
+      
+      operator MotionTpl<Scalar,Options> () const
+      {
+        typedef MotionTpl<Scalar,Options> ReturnType;
+        return ReturnType(ReturnType::Vector3::Zero(), w);
+      }
 
       template<typename OtherScalar, int OtherOptions>
       inline operator MotionTpl<OtherScalar, OtherOptions> () const
@@ -131,6 +137,11 @@ namespace se3
       inline void subTo (MotionTpl<OtherScalar, OtherOptions> & dest) const
       {
         dest.angular() -= w;
+      }
+      
+      Motion dense() const
+      {
+        return (Motion) (*this);
       }
     }; // struct MotionSpherical
 

@@ -42,7 +42,7 @@ namespace se3
     ///
     /// \return A reference to the upper triangular matrix \f$U\f$.
     ///
-    inline const Data::MassMatrix &
+    inline const Eigen::MatrixXd &
     decompose(const Model & model,
               Data & data);
 

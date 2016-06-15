@@ -67,7 +67,13 @@ namespace se3
     template<typename OtherDerived>
     inline bool operator== (const SE3Base<OtherDerived> & other) const
     {
-      return derived().isEqual(other.derived());
+      return isEqual(other);
+    }
+    
+    template<typename OtherDerived>
+    inline bool isEqual(const SE3Base<OtherDerived> & other) const
+    {
+      return derived().dense().isEqual(other.derived().dense());
     }
     
     template<typename OtherDerived>
@@ -145,6 +151,15 @@ namespace se3
     {
       return Derived::Random();
     }
+    
+    // Must be reimplemented in the derived class
+    template<typename OtherScalar, int OtherOptions>
+    SE3Tpl<OtherScalar,OtherOptions> dense() const
+    {
+      return derived().dense();
+    }
+    
+    
   }; // class SE3Base
   
   namespace internal {
@@ -331,6 +346,8 @@ namespace se3
     typedef SE3Base< SE3Tpl<_Scalar,_Options> > Base;
     typedef typename traits<SE3Tpl>::SE3ActionReturnType SE3ActionReturnType;
     
+    enum { Options = _Options };
+    
     SPATIAL_TYPEDEF_TEMPLATE(SE3Tpl);
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
@@ -420,6 +437,8 @@ namespace se3
     {
       return toHomogeneousMatrix();
     }
+    
+    
 
     /// Vb.toVector() = bXa.toMatrix() * Va.toVector()
     inline Matrix6 toActionMatrix() const
@@ -453,7 +472,7 @@ namespace se3
     template<typename OtherDerived>
     inline bool isEqual (const SE3Base<OtherDerived> & other) const
     {
-      return other.derived().isEqual(*this);
+      return isEqual(other.dense());
     }
     
     template<typename OtherScalar, int OtherOptions>
@@ -528,6 +547,12 @@ namespace se3
     inline void translation(const Eigen::MatrixBase<D> & t)
     {
       EIGEN_STATIC_ASSERT_VECTOR_SPECIFIC_SIZE(D,3); trans=t;
+    }
+    
+    
+    const SE3Tpl & dense() const
+    {
+      return *this;
     }
 
   protected:

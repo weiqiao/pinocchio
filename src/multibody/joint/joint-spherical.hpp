@@ -66,7 +66,7 @@ namespace se3
     };
   }; // traits MotionSpherical
 
-  struct MotionSpherical : MotionBase < MotionSpherical >
+  struct MotionSpherical : MotionSparseBase < MotionSpherical >
   {
     SPATIAL_TYPEDEF_NO_TEMPLATE(MotionSpherical);
 
@@ -92,6 +92,11 @@ namespace se3
     void subTo (MotionTpl<OtherScalar, OtherOptions> & dest) const
     {
       dest.angular() -= w;
+    }
+    
+    Motion dense() const
+    {
+      return (Motion) (*this);
     }
   }; // struct MotionSpherical
 

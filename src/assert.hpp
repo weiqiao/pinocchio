@@ -42,7 +42,7 @@ namespace se3
         YOU_CALLED_A_METHOD_WHICH_CANNOT_BE_APPLIED
       };
     };
-  } // namespace internat
+  } // namespace internal
 
 
 } // namespace se3 

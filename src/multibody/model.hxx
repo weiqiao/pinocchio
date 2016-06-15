@@ -136,7 +136,7 @@ namespace se3
   inline void Model::appendBodyToJoint(const JointIndex parent, const SE3 & bodyPlacement, const Inertia & Y,
                                        const std::string & bodyName)
   {
-    const Inertia & iYf = placement.act(Y); //TODO
+    const Inertia & iYf = bodyPlacement.act(Y); //TODO
     inertias[parent] += iYf;
 
     bodyParents.push_back(parent);

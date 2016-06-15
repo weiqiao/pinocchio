@@ -63,7 +63,7 @@ namespace se3
     };
   }; // traits MotionPrismaticUnaligned
 
-  struct MotionPrismaticUnaligned : MotionBase <MotionPrismaticUnaligned>
+  struct MotionPrismaticUnaligned : MotionSparseBase <MotionPrismaticUnaligned>
   {
     SPATIAL_TYPEDEF_NO_TEMPLATE(MotionPrismaticUnaligned);
 
@@ -79,6 +79,11 @@ namespace se3
     void addTo (MotionTpl<OtherScalar, OtherOptions> & dest) const
     {
       dest.linear() += axis*v;
+    }
+    
+    Motion dense() const
+    {
+      return (Motion) (*this);
     }
   }; // struct MotionPrismaticUnaligned
 

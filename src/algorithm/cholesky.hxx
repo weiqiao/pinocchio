@@ -25,7 +25,7 @@ namespace se3
   namespace cholesky
   {
 
-    const Data::MassMatrix &
+    const Eigen::MatrixXd &
     decompose(const Model & model,
               Data & data)
     {
@@ -43,8 +43,8 @@ namespace se3
        *    end
        */
       
-      Data::MassMatrix & M = data.M;
-      Data::MassMatrix & U = data.U;
+      Eigen::MatrixXd & M = data.M;
+      Eigen::MatrixXd & U = data.U;
       Eigen::VectorXd & D = data.D;
       
       for(int j=model.nv-1;j>=0;--j )
@@ -90,7 +90,7 @@ namespace se3
     {
       assert(v.rows() == model.nv);
       
-      const Data::MassMatrix & U = data.U;
+      const Eigen::MatrixXd & U = data.U;
       const std::vector<int> & nvt = data.nvSubtree_fromRow;
       for( int k=model.nv-2;k>=0;--k ) // You can start from nv-2 (no child in nv-1)
         v.middleRows(k+1,nvt[(Model::Index)k]-1) += U.row(k).segment(k+1,nvt[(Model::Index)k]-1).transpose()*v.row(k);
@@ -110,7 +110,7 @@ namespace se3
        * For any k, v_k = y_k + U_{k,k+1:} y_{k+1:} */
       assert(v.rows() == model.nv);
       
-      const Data::MassMatrix & U = data.U;
+      const Eigen::MatrixXd & U = data.U;
       const std::vector<int> & nvt = data.nvSubtree_fromRow;
       
       for( int k=model.nv-2;k>=0;--k ) // You can start from nv-2 (no child in nv-1)
@@ -127,7 +127,7 @@ namespace se3
        * For any k, v_k = y_k + sum_{m \in parent{k}} U(m,k) v(k). */
       assert(v.rows() == model.nv);
       
-      const Data::MassMatrix & U = data.U;
+      const Eigen::MatrixXd & U = data.U;
       const std::vector<int> & nvt = data.nvSubtree_fromRow;
       for( int k=0;k<model.nv-1;++k ) // You can stop one step before nv.
         v.middleRows(k+1,nvt[(Model::Index)k]-1) -= U.row(k).segment(k+1,nvt[(Model::Index)k]-1).transpose()*v.row(k);
@@ -144,7 +144,7 @@ namespace se3
       {
         assert(v.rows() == model.nv);
         
-        const Data::MassMatrix & M = data.M;
+        const Eigen::MatrixXd & M = data.M;
         const std::vector<int> & nvt = data.nvSubtree_fromRow;
         Mat res(model.nv);
         

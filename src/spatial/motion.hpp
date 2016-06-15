@@ -69,6 +69,12 @@ namespace se3
     template<typename OtherDerived>
     inline bool operator== (const MotionBase<OtherDerived> & other) const
     {
+      return isEqual(other);
+    }
+    
+    template<typename OtherDerived>
+    inline bool isEqual (const MotionBase<OtherDerived> & other) const
+    {
       return derived().isEqual(other.derived());
     }
     
@@ -148,9 +154,34 @@ namespace se3
     
     static Derived Zero() { return Derived::Zero(); }
     static Derived Random() { return Derived::Random(); }
+    
+    template<typename OtherScalar, int OtherOptions>
+    MotionTpl<OtherScalar, OtherOptions> dense() const
+    {
+      return derived().dense();
+    }
 
 
   }; // class MotionBase
+  
+  template<class Derived>
+  class MotionSparseBase : public MotionBase<Derived>
+  {
+  protected:
+    SPATIAL_TYPEDEF_TEMPLATE(Derived);
+    
+  public:
+    
+    typedef MotionBase<Derived> Base;
+    using Base::derived;
+    
+    template<typename OtherDerived>
+    inline bool isEqual (const MotionBase<OtherDerived> & other) const
+    {
+      return derived().dense().isEqual(other.derived());
+    }
+    
+  }; // class MotionSparseBase
 
 
   template<typename T, int U>
@@ -274,7 +305,7 @@ namespace se3
     template<typename OtherDerived>
     inline bool isEqual (const MotionBase<OtherDerived> & other) const
     {
-      return other.derived().isEqual(*this);
+      return other.isEqual(*this);;
     }
     
     template<typename OtherScalar, int OtherOptions>
@@ -402,6 +433,11 @@ namespace se3
     Vector6 & coeffs() { return data; }
     const Vector6 & coeffs() const { return data; }
     operator Vector6 () const { return coeffs(); }
+    
+    const MotionTpl & dense() const
+    {
+      return *this;
+    }
 
 //    /** \brief Compute the classical acceleration of point according to the spatial velocity and spatial acceleration of the frame centered on this point
 //     */
@@ -464,7 +500,7 @@ namespace se3
     };
   }; // traits BiasZero
 
-  struct BiasZero : public MotionBase<BiasZero>
+  struct BiasZero : public MotionSparseBase<BiasZero>
   {
     SPATIAL_TYPEDEF_NO_TEMPLATE(BiasZero);
     
@@ -494,6 +530,18 @@ namespace se3
     template<typename OtherDerived>
     void subTo (MotionBase<OtherDerived> &) const
     {
+    }
+    
+    template <typename Scalar, int Options>
+    MotionTpl<Scalar,Options> dense() const
+    {
+      return (MotionTpl<Scalar,Options>) (*this);
+    }
+    
+    template<typename Scalar, int Options>
+    inline bool isEqual (const MotionTpl<Scalar,Options> & other) const
+    {
+      return other.coeffs().isZero();
     }
   }; // struct BiasZero
 
