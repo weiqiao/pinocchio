@@ -374,7 +374,7 @@ namespace se3
     template<typename SE3Scalar, int SE3Options>
     inline SE3ActionReturnType SE3ActOn(const SE3Tpl<SE3Scalar,SE3Options> & M) const
     {
-      Vector3 Rw (M.rotation() * angular());
+      const Vector3 Rw (M.rotation() * angular());
       return MotionTpl(M.rotation()*linear() + M.translation().cross(Rw),
                        Rw);
     }

@@ -214,7 +214,7 @@ namespace se3
     template<typename SE3Scalar, int SE3Options>
     inline ForceTpl SE3ActOn(const SE3Tpl<SE3Scalar,SE3Options> & M) const
     {
-      const Vector3 & Rf = M.rotation() * linear();
+      const Vector3  Rf (M.rotation() * linear());
       return ForceTpl(Rf,M.translation().cross(Rf)+M.rotation()*angular());
     }
 

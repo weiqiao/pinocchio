@@ -28,6 +28,8 @@
 #include "pinocchio/multibody/visitor.hpp"
 #include "pinocchio/multibody/model.hpp"
 #include "pinocchio/algorithm/rnea.hpp"
+#include "pinocchio/algorithm/kinematics.hpp"
+#include "pinocchio/algorithm/center-of-mass.hpp"
 #include "pinocchio/multibody/parser/sample-models.hpp"
 #include "pinocchio/tools/timer.hpp"
 
@@ -45,9 +47,9 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/utility/binary.hpp>
 
-BOOST_AUTO_TEST_SUITE ( Rnea )
+BOOST_AUTO_TEST_SUITE ( RNEA )
 
-BOOST_AUTO_TEST_CASE ( test_rnea )
+BOOST_AUTO_TEST_CASE ( timing_rnea )
 {
   #ifdef __SSE3__
     _MM_SET_DENORMALS_ZERO_MODE(_MM_DENORMALS_ZERO_ON);
@@ -84,6 +86,80 @@ BOOST_AUTO_TEST_CASE ( test_rnea )
     }
   timer.toc(std::cout,NBT);
 
+}
+  
+BOOST_AUTO_TEST_CASE ( test_rnea )
+{
+  using namespace se3;
+  using namespace Eigen;
+  Model model; buildModels::humanoidSimple(model);
+  
+  Data data(model), data_ref(model);
+  
+  VectorXd q = VectorXd::Random(model.nq);q.segment <4> (3).normalize();
+  VectorXd v = VectorXd::Random(model.nv);
+  VectorXd a = VectorXd::Random(model.nv);
+  
+  Data::Matrix3x Jcom = jacobianCenterOfMass(model,data_ref,q);
+  
+  
+  VectorXd G = -data_ref.mass[0] * Jcom.transpose() * Model::gravity981;
+  VectorXd tau = rnea(model,data,q,0*v,0*a);
+  BOOST_CHECK (tau.isApprox(G, 1e-12));
+  
+  for(size_t k=0; k<(size_t)model.njoint; ++k)
+  {
+    BOOST_CHECK (data.liMi[k].isApprox(data_ref.liMi[k]));
+  }
+  
+  model.gravity.setZero();
+  forwardKinematics(model,data_ref,q,v,a);
+  rnea(model,data,q,v,a);
+  
+  for(size_t k=0; k<(size_t)model.njoint; ++k)
+  {
+    BOOST_CHECK (data.liMi[k].isApprox(data_ref.liMi[k]));
+    BOOST_CHECK (data.v[k].coeffs().isApprox(data_ref.v[k].coeffs()));
+    BOOST_CHECK (data.a_gf[k].coeffs().isApprox(data_ref.a[k].coeffs()));
+  }
+  
+  
+}
+  
+BOOST_AUTO_TEST_SUITE_END ()
+  
+BOOST_AUTO_TEST_SUITE ( NLE )
+  
+BOOST_AUTO_TEST_CASE ( test_nle )
+{
+  using namespace se3;
+  using namespace Eigen;
+  Model model; buildModels::humanoidSimple(model);
+  
+  Data data(model), data_ref(model);
+  
+  VectorXd q = VectorXd::Random(model.nq);q.segment <4> (3).normalize();
+  VectorXd v = VectorXd::Random(model.nv);
+  VectorXd a = VectorXd::Random(model.nv);
+  
+  Data::Matrix3x Jcom = jacobianCenterOfMass(model,data_ref,q);
+  
+  
+  VectorXd G = -data_ref.mass[0] * Jcom.transpose() * Model::gravity981;
+  VectorXd tau = nonLinearEffects(model,data,q,0*v);
+  
+  BOOST_CHECK (tau.isApprox(G, 1e-12));
+  
+  model.gravity.setZero();
+  forwardKinematics(model,data_ref,q,v,0*a);
+  nonLinearEffects(model,data,q,v);
+  
+  for(size_t k=0; k<(size_t)model.njoint; ++k)
+  {
+    BOOST_CHECK (data.liMi[k].isApprox(data_ref.liMi[k]));
+    BOOST_CHECK (data.v[k].coeffs().isApprox(data_ref.v[k].coeffs()));
+    BOOST_CHECK (data.a_gf[k].coeffs().isApprox(data_ref.a[k].coeffs()));
+  }
 }
   
 BOOST_AUTO_TEST_CASE ( test_nle_vs_rnea )
@@ -137,4 +213,5 @@ BOOST_AUTO_TEST_CASE ( test_nle_vs_rnea )
   
   BOOST_CHECK (tau_nle.isApprox(tau_rnea, 1e-12));
 }
+  
 BOOST_AUTO_TEST_SUITE_END ()

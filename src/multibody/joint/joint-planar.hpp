@@ -70,7 +70,7 @@ namespace se3
     SPATIAL_TYPEDEF_NO_TEMPLATE(MotionPlanar);
 
     MotionPlanar () : vx_(NAN), vy_(NAN), wz_(NAN)      {}
-    MotionPlanar (const Scalar_t vx, const Scalar_t vy, const Scalar_t wz)
+    MotionPlanar (const Scalar_t & vx, const Scalar_t & vy, const Scalar_t & wz)
     : vx_(vx)
     , vy_(vy)
     , wz_(wz)

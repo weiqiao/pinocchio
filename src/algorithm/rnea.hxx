@@ -59,14 +59,14 @@ namespace se3
       else
         data.v[i] = jdata.v();
       
-//      data.a_gf[i] = data.liMi[i].actInv(data.a_gf[parent]) + jdata.S()*jmodel.jointVelocitySelector(a) + (data.v[i] ^ jdata.v()) + jdata.c();
+      data.a_gf[i] = data.liMi[i].actInv(data.a_gf[parent]) + jdata.S()*jmodel.jointVelocitySelector(a) + (data.v[i] ^ jdata.v()) + jdata.c();
       
 //      data.a_gf[i] = data.liMi[i].actInv(data.a_gf[parent]);
 //      data.a_gf[i] += (data.v[i] ^ jdata.v());
 //      data.a_gf[i] += jdata.c() + jdata.S() * jmodel.jointVelocitySelector(a);
       
-      data.a_gf[i] = data.liMi[i].actInv(data.a_gf[parent]);
-      data.a_gf[i] += jdata.S()*jmodel.jointVelocitySelector(a) + jdata.c() + (data.v[i] ^ jdata.v()) ;
+//      data.a_gf[i] = data.liMi[i].actInv(data.a_gf[parent]);
+//      data.a_gf[i] += jdata.S()*jmodel.jointVelocitySelector(a) + jdata.c() + (data.v[i] ^ jdata.v()) ;
       
       data.f[i] = model.inertias[i]*data.a_gf[i] + model.inertias[i].vxiv(data.v[i]); // -f_ext
     }

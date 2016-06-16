@@ -162,6 +162,7 @@ BOOST_AUTO_TEST_CASE ( test_Force )
   SE3 amb = SE3::Random();
   SE3 bmc = SE3::Random();
   SE3 amc = amb*bmc;
+  SE3 M = SE3::Identity();
 
   Force bf = Force::Random();
   Force bf2 = Force::Random();
@@ -180,7 +181,10 @@ BOOST_AUTO_TEST_CASE ( test_Force )
   // Test .+=.
   Force bf3 = bf; bf3 += bf2;
   BOOST_CHECK(bf3.coeffs().isApprox(bf_vec+bf2_vec, 1e-12));
-
+  
+  Force bf33 = bf; bf33 += M.act(bf2);
+  BOOST_CHECK(bf33.coeffs().isApprox(bf_vec+bf2_vec, 1e-12));
+  
   // Test .= V6
   bf3 = bf2_vec;
   BOOST_CHECK(bf3.coeffs().isApprox(bf2_vec, 1e-12));
