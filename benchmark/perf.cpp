@@ -38,7 +38,9 @@ int main(int argc, const char ** argv)
   using namespace Eigen;
   using namespace se3;
   
+#ifdef _MM_SET_DENORMALS_ZERO_MODE
   _MM_SET_DENORMALS_ZERO_MODE(_MM_DENORMALS_ZERO_ON);
+#endif
   
   StackTicToc timer(StackTicToc::US);
 #ifdef NDEBUG
