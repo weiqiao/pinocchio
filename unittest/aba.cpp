@@ -60,6 +60,8 @@ BOOST_AUTO_TEST_CASE ( test_aba_simple )
   tau = data_ref.M * a + data_ref.nle;
   aba(model, data, q, v, tau);
   
+  std::cout << "data.ddq : " << data.ddq.transpose() << std::endl;
+  std::cout << "a : " << a.transpose() << std::endl;
   BOOST_CHECK(data.ddq.isApprox(a, 1e-12));
   
 }
@@ -88,9 +90,14 @@ BOOST_AUTO_TEST_CASE ( test_aba_vs_rnea )
   aba(model, data, q, v, tau);
   
   VectorXd tau_ref = rnea(model, data_ref, q, v, a);
+  
+  std::cout << "tau_ref : " << tau_ref.transpose() << std::endl;
+  std::cout << "tau : " << tau.transpose() << std::endl;
+  std::cout << "data_ref.nle : " << data_ref.nle.transpose() << std::endl;
   BOOST_CHECK(tau_ref.isApprox(tau, 1e-12));
   
-  
+  std::cout << "data.ddq : " << data.ddq.transpose() << std::endl;
+  std::cout << "a : " << a.transpose() << std::endl;
   BOOST_CHECK(data.ddq.isApprox(a, 1e-12));
   
 }
