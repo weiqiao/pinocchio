@@ -171,7 +171,7 @@ namespace se3
 
     JointIndex     id()      const { return ::se3::id(toVariant()); }
 
-    void setIndexes(JointIndex ,int ,int ) { SE3_STATIC_ASSERT(false, THIS_METHOD_SHOULD_NOT_BE_CALLED_ON_DERIVED_CLASS); }
+    void setIndexes(JointIndex ,int ,int ) { PINOCCHIO_STATIC_ASSERT(false, THIS_METHOD_SHOULD_NOT_BE_CALLED_ON_DERIVED_CLASS); }
   };
   
 
