@@ -94,6 +94,7 @@ SET(${PROJECT_NAME}_TOOLS_HEADERS
   )
 
 SET(${PROJECT_NAME}_SPATIAL_HEADERS
+  spatial/spatial.hpp
   spatial/symmetric3.hpp
   spatial/se3.hpp
   spatial/motion.hpp
