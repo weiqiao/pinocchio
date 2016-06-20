@@ -130,7 +130,7 @@ namespace se3
     const Matrix3 & R = M.rotation();
     const Vector3 & p = M.translation();
     Vector3 w(log3(R));
-    Scalar t = w.norm();
+    Scalar t = w.norm(); // angular velocity
     if (t > 1e-15)
     {
       Matrix3 S(alphaSkew(1./t, w));
