@@ -7,9 +7,9 @@ Pinocchio: a C++ library for efficient Rigid Multi-body Dynamics computations
 [![Coverity Scan Build Status](https://scan.coverity.com/projects/7824/badge.svg)](https://scan.coverity.com/projects/pinocchio)
 
 **Pinocchio** instatiates state-of-the-art Rigid Body Algotithms for poly-articulated systems based on revisited Roy Featherstone's algorithms. It is first tailored for legged robotics applications, but it can be used in extra contextes.
-It is built upon the well-known and efficient Eigen library. **Pinocchio** comes with a Python interface for fast code protyping.
+It is built upon Eigen for linear algebra and FCL for collision detections. **Pinocchio** comes with a Python interface for fast code protyping.
 
-**Pinocchio** is now at the hearth of various robotics softwares as the [Stack-of-Tasks](http://stack-of-tasks.github.io) or the [Humanoid Path Planner](https://humanoid-path-planner.github.io/hpp-doc)
+**Pinocchio** is now at the hearth of various robotics softwares as the [Stack-of-Tasks](http://stack-of-tasks.github.io) or the [Humanoid Path Planner](https://humanoid-path-planner.github.io/hpp-doc).
 
 ## Installation
 
@@ -33,6 +33,7 @@ have to be available on your machine.
 ### Optional dependencies
    - urdfdom (version >= 0.2)
    - LUA 5.1
+   - [FCL](https://github.com/flexible-collision-library/fcl)
    
 ### Python bindings
    - Python 2.7 or 3.0
@@ -42,4 +43,4 @@ have to be available on your machine.
 
 ## Acknowledgments
 
-The development of **Pinocchio** is supported by the [Gepetto team](http://projects.laas.fr/gepetto/) @LAAS-CNRS
+The development of **Pinocchio** is supported by the [Gepetto team](http://projects.laas.fr/gepetto/) @LAAS-CNRS.
