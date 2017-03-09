@@ -15,26 +15,26 @@ It is built upon the well-known and efficient Eigen library. **Pinocchio** comes
 
 **Pinocchio** can be easily installed on various Linux and Unix distributions. Please refer to the [installation procedure](http://stack-of-tasks.github.io/pinocchio/download.html).
 
-### Dependencies
+## Dependencies
 
 The Pinocchio software depends on several packages which
 have to be available on your machine.
 
-#### Build dependencies
+### Build dependencies
    - cmake (version >= 2.6)
    - pkg-config
    - Boost with components unit_test_framework
    - G++/CLANG
    
-#### Core dependencies
+### Core dependencies
    - Eigen3 (version >= 3.0.5)   
    - Boost with components filesystem 
    
-#### Optional dependencies
+### Optional dependencies
    - urdfdom (version >= 0.2)
    - LUA 5.1
    
-#### Python bindings
+### Python bindings
    - Python 2.7 or 3.0
    - Numpy
    - [EigenPy](https://github.com/stack-of-tasks/eigenpy.git)
