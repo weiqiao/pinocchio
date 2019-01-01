@@ -17,6 +17,7 @@
 
 #include <boost/fusion/container/generation/make_list.hpp>
 #include <pinocchio/multibody/model.hpp>
+#include "pinocchio/multibody/data.hpp"
 #include "pinocchio/parsers/sample-models.hpp"
 #include <pinocchio/algorithm/crba.hpp>
 #include <pinocchio/algorithm/aba.hpp>
@@ -41,7 +42,7 @@ BOOST_AUTO_TEST_CASE ( test_check )
 {
   using namespace boost::fusion;
 
-  se3::Model model; buildModels::humanoidSimple(model);
+  se3::Model model; buildModels::humanoidRandom(model);
   
   BOOST_CHECK(model.check (Check1()));
   BOOST_CHECK(model.check (CRBAChecker()));

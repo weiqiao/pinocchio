@@ -15,11 +15,11 @@
 // Pinocchio If not, see
 // <http://www.gnu.org/licenses/>.
 
-#include <boost/test/unit_test.hpp>
-#include <boost/utility/binary.hpp>
-
 #include "pinocchio/multibody/model.hpp"
 #include "pinocchio/parsers/sample-models.hpp"
+
+#include <boost/test/unit_test.hpp>
+#include <boost/utility/binary.hpp>
 
 using namespace se3;
 
@@ -29,10 +29,10 @@ BOOST_AUTO_TEST_CASE(test_model_subtree)
 {
   Model model;
   std::cout << "build model" << std::endl;
-  buildModels::humanoidSimple(model);
+  buildModels::humanoidRandom(model);
   
   Model::JointIndex idx_larm1 = model.getJointId("larm1_joint");
-  BOOST_CHECK(idx_larm1<model.njoints);
+  BOOST_CHECK(idx_larm1<(Model::JointIndex)model.njoints);
   Model::IndexVector subtree = model.subtrees[idx_larm1];
   BOOST_CHECK(subtree.size()==6);
   
